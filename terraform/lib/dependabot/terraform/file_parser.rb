@@ -53,14 +53,6 @@ module Dependabot
           end
         end
 
-        lock_file.each do |file|
-          lockfile_provider = parsed_file(file).fetch("provider", {})
-          lockfile_provider.each do |source, details|
-            dependency_set << build_lockfile_dependency(file, source, details.first)
-          end
-        end
-
-        dependency_set.dependencies.select{ |dependency| prefer_lockfile_source(dependency) }
         dependency_set.dependencies.sort_by(&:name)
       end
 
@@ -141,29 +133,6 @@ module Dependabot
         )
       end
       
-      def build_lockfile_dependency(file, provider_source, details = {})
-        current_version = details["version"]&.strip
-        version_req = details["constraints"]&.strip
-        hostname, namespace, name = provider_source_from(provider_source, name)
-        dependency_name = "#{namespace}/#{name}"
-
-        Dependency.new(
-          name: dependency_name,
-          version: determine_version_for(hostname, namespace, name, version_req),
-          package_manager: "terraform",
-          requirements: [
-            requirement: current_version,
-            groups: [],
-            file: file.name,
-            source: {
-              type: "lockfile",
-              registry_hostname: hostname,
-              module_identifier: dependency_name
-            }
-          ]
-        )
-      end
-
       # Full docs at https://www.terraform.io/docs/modules/sources.html
       def source_from(details_hash)
         raw_source = details_hash.fetch("source")
