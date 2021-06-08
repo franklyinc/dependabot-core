@@ -116,7 +116,7 @@ RSpec.describe Dependabot::Python::UpdateChecker::PipVersionResolver do
       it { is_expected.to eq(Gem::Version.new("2.1.1")) }
 
       context "that disallows all fixed versions" do
-        let(:python_version_content) { "2.7.13\n" }
+        let(:python_version_content) { "3.5.3\n" }
 
         it { is_expected.to be_nil }
       end
