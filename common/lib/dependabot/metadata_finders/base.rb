@@ -11,9 +11,10 @@ module Dependabot
 
       PACKAGE_MANAGERS_WITH_RELIABLE_DIRECTORIES = %w(npm_and_yarn).freeze
 
-      attr_reader :dependency, :credentials
+      attr_reader :source, :dependency, :credentials
 
-      def initialize(dependency:, credentials:)
+      def initialize(source:, dependency:, credentials:)
+        @source = source
         @dependency = dependency
         @credentials = credentials
       end
