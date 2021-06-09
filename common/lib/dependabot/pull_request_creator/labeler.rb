@@ -238,6 +238,7 @@ module Dependabot
           when "github" then fetch_github_labels
           when "gitlab" then fetch_gitlab_labels
           when "azure" then fetch_azure_labels
+          when "bitbucket" then fetch_bitbucket_labels
           else raise "Unsupported provider #{source.provider}"
           end
       end
@@ -269,6 +270,19 @@ module Dependabot
       end
 
       def fetch_azure_labels
+        langauge_name =
+          self.class.label_details_for_package_manager(package_manager).
+          fetch(:name)
+
+        @labels = [
+          *@labels,
+          DEFAULT_DEPENDENCIES_LABEL,
+          DEFAULT_SECURITY_LABEL,
+          langauge_name
+        ].uniq
+      end
+
+      def fetch_bitbucket_labels
         langauge_name =
           self.class.label_details_for_package_manager(package_manager).
           fetch(:name)
