@@ -352,7 +352,7 @@ module Dependabot
         @metadata_finder[dependency.name] ||=
           MetadataFinders.
           for_package_manager(dependency.package_manager).
-          new(dependency: dependency, credentials: credentials)
+          new(source: source, dependency: dependency, credentials: credentials)
       end
 
       def pr_name_prefixer
